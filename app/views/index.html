@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo de Seguridad Web - AWS WAF</title>
+</head>
+<body>
+    <h1>Aplicación de Pruebas de Seguridad Web</h1>
+
+    <p>
+        Bienvenido a la aplicación diseñada para probar la arquitectura de defensa web 
+        con ALB, AWS WAF y Firewall de Red en AWS.
+    </p>
+
+    <h2>Funcionalidades disponibles</h2>
+    <ul>
+        <li><a href="/search">Pruebas de Búsqueda (SQL Injection)</a></li>
+        <li><a href="/login">Login (Pruebas de fuerza bruta)</a></li>
+        <li><a href="/api-test">Pruebas API REST (GET, POST, PUT, DELETE)</a></li>
+        <li><a href="/admin">Página Admin (acceso sensible)</a></li>
+        <li><a href="/read-file?file=server.js">Leer archivos (Path Traversal)</a></li>
+    </ul>
+
+    <h2>Enviar comentario (Prueba de XSS)</h2>
+    <form action="/comment" method="POST">
+        <input type="text" name="comment" placeholder="Escribe un comentario" required>
+        <button type="submit">Enviar</button>
+    </form>
+
+    <p>Ejemplos para probar:</p>
+    <ul>
+        <li><code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code></li>
+        <li><code>' OR '1'='1</code></li>
+        <li><code>../../../../etc/passwd</code></li>
+    </ul>
+</body>
+</html>

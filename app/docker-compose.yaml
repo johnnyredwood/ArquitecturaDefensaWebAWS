@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webapp
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - APP_NAME=WebSecureDemo
+    ports:
+      - "3000:3000"   # Esto puede eliminarse en AWS (ALB usará el puerto privado)
+    deploy:
+      replicas: 3      # Simula múltiples instancias detrás del ALB
+      restart_policy:
+        condition: on-failure
+    networks:
+      - internal_net
+
+networks:
+  internal_net:
+    driver: bridge
