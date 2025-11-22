@@ -39,11 +39,7 @@ resource "aws_networkfirewall_rule_group" "stateless" {
               destination {
                 address_definition = "0.0.0.0/0"
               }
-              protocols {
-                protocol_definition {
-                  value = "6" # TCP
-                }
-              }
+              protocols = [6] # TCP
               source_port {
                 from_port = 0
                 to_port   = 65535

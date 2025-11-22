@@ -12,7 +12,7 @@ output "private_subnets" {
 
 output "alb_dns" {
   description = "URL DNS del Application Load Balancer"
-  value       = module.alb.alb_dns
+  value       = module.alb.alb_dns_name
 }
 
 output "waf_arn" {

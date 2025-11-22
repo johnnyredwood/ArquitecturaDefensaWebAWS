@@ -1,3 +1,4 @@
 output "instance_ids" {
-  value = aws_instance.app[*].id
+  description = "Auto Scaling Group name"
+  value       = aws_autoscaling_group.web_app.name
 }
