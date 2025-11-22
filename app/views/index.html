@@ -1,37 +1,104 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demo de Seguridad Web - AWS WAF</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <h1>Aplicación de Pruebas de Seguridad Web</h1>
+    <div class="container">
+        <header class="header">
+            <h1>Aplicación de Pruebas de Seguridad Web</h1>
+            <p>Demostración de arquitectura de defensa web con ALB, AWS WAF y Firewall de Red en AWS</p>
+        </header>
 
-    <p>
-        Bienvenido a la aplicación diseñada para probar la arquitectura de defensa web 
-        con ALB, AWS WAF y Firewall de Red en AWS.
-    </p>
+        <div class="card-grid">
+            <div class="card">
+                <h2>Pruebas de Búsqueda</h2>
+                <p>Prueba vulnerabilidades de SQL Injection en formularios de búsqueda.</p>
+                <div class="alert alert-info">
+                    <strong>Ejemplo:</strong> <code>' OR '1'='1</code> o <code>'; DROP TABLE users--</code>
+                </div>
+                <a href="/search" class="btn">
+                    Probar SQL Injection
+                </a>
+            </div>
 
-    <h2>Funcionalidades disponibles</h2>
-    <ul>
-        <li><a href="/search">Pruebas de Búsqueda (SQL Injection)</a></li>
-        <li><a href="/login">Login (Pruebas de fuerza bruta)</a></li>
-        <li><a href="/api-test">Pruebas API REST (GET, POST, PUT, DELETE)</a></li>
-        <li><a href="/admin">Página Admin (acceso sensible)</a></li>
-        <li><a href="/read-file?file=server.js">Leer archivos (Path Traversal)</a></li>
-    </ul>
+            <div class="card">
+                <h2>Pruebas de Login</h2>
+                <p>Simula ataques de fuerza bruta y prueba el rate limiting.</p>
+                <div class="alert alert-warning">
+                    <strong>Ejemplo:</strong> Múltiples intentos de login desde la misma IP
+                </div>
+                <a href="/login" class="btn btn-warning">
+                    Probar Fuerza Bruta
+                </a>
+            </div>
 
-    <h2>Enviar comentario (Prueba de XSS)</h2>
-    <form action="/comment" method="POST">
-        <input type="text" name="comment" placeholder="Escribe un comentario" required>
-        <button type="submit">Enviar</button>
-    </form>
+            <div class="card">
+                <h2>Pruebas API REST</h2>
+                <p>Testea diferentes métodos HTTP y validación de entrada en APIs.</p>
+                <div class="alert alert-info">
+                    <strong>Métodos:</strong> GET, POST, PUT, DELETE
+                </div>
+                <a href="/api-test" class="btn btn-secondary">
+                    Probar APIs
+                </a>
+            </div>
 
-    <p>Ejemplos para probar:</p>
-    <ul>
-        <li><code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code></li>
-        <li><code>' OR '1'='1</code></li>
-        <li><code>../../../../etc/passwd</code></li>
-    </ul>
+            <div class="card">
+                <h2>Path Traversal</h2>
+                <p>Prueba acceso no autorizado a archivos del sistema.</p>
+                <div class="alert alert-danger">
+                    <strong>Ejemplo:</strong> <code>../../../../etc/passwd</code>
+                </div>
+                <a href="/read-file?file=data.json" class="btn btn-danger">
+                   Probar File Access
+                </a>
+            </div>
+
+            <div class="card">
+                <h2>Pruebas XSS</h2>
+                <p>Envía scripts maliciosos para probar protección contra Cross-Site Scripting.</p>
+                <div class="alert alert-warning">
+                    <strong>Ejemplo:</strong> <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code>
+                </div>
+                <form action="/comment" method="POST" class="form-group">
+                    <input type="text" name="comment" class="form-control" 
+                           placeholder="Escribe un comentario (prueba XSS)" required>
+                    <button type="submit" class="btn" style="margin-top: 0.5rem; width: 100%;">
+                        <span class="icon">📨</span> Enviar Comentario
+                    </button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>Command Injection</h2>
+                <p>Prueba inyección de comandos del sistema operativo.</p>
+                <div class="alert alert-danger">
+                    <strong>Ejemplo:</strong> <code>; cat /etc/passwd</code> o <code>| ls -la</code>
+                </div>
+                <a href="/api-test" class="btn btn-danger">
+                    Probar Command Injection
+                </a>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Instrucciones de Prueba</h2>
+            <div class="test-examples">
+                <h3>Pruebas recomendadas para validar AWS WAF:</h3>
+                <ul>
+                    <li><code>' OR '1'='1</code> - SQL Injection básico</li>
+                    <li><code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code> - XSS básico</li>
+                    <li><code>../../../etc/passwd</code> - Path traversal</li>
+                    <li>Múltiples requests rápidos a /login - Rate limiting</li>
+                    <li><code>; ls -la</code> en el campo ping - Command injection</li>
+                    <li>Requests desde diferentes user-agents sospechosos</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

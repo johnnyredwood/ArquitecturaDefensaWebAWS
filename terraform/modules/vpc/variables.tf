@@ -1,7 +1,10 @@
 variable "project_name" {
-  type = string
+  description = "Nombre del proyecto"
+  type        = string
 }
 
 variable "region" {
-  type = string
+  description = "Región de AWS"
+  type        = string
+  default     = "us-east-1"
 }

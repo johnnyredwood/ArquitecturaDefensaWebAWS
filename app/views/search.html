@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pruebas SQL Injection - AWS WAF Demo</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="nav-breadcrumb">
+            <a href="/">Inicio</a>
+            <span class="icon">›</span>
+            <span>Pruebas de Búsqueda</span>
+        </div>
+
+        <div class="header">
+            <h1>Prueba de Búsqueda - SQL Injection</h1>
+            <p>Simula vulnerabilidades SQL Injection en formularios de búsqueda</p>
+        </div>
+
+        <div class="card">
+            <h2>Formulario de Búsqueda</h2>
+            <p>Ingresa consultas de búsqueda para probar la protección del WAF contra SQL Injection:</p>
+            
+            <form action="/search" method="POST" class="form-group">
+                <label for="query">Término de búsqueda:</label>
+                <input type="text" id="query" name="query" class="form-control" 
+                       placeholder="Buscar producto..." required>
+                <button type="submit" class="btn" style="margin-top: 1rem;">
+                    Buscar
+                </button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Ejemplos para Probar</h2>
+            <div class="test-examples">
+                <p><strong>Pruebas de SQL Injection:</strong></p>
+                <ul>
+                    <li><code>' OR '1'='1</code> - Retorna todos los registros</li>
+                    <li><code>'; DROP TABLE users--</code> - Inyección destructiva</li>
+                    <li><code>' UNION SELECT username, password FROM users--</code> - Extracción de datos</li>
+                    <li><code>admin' --</code> - Bypass de autenticación</li>
+                    <li><code>' AND 1=1 --</code> - Condición siempre verdadera</li>
+                </ul>
+                
+                <p><strong>Búsquedas legítimas:</strong></p>
+                <ul>
+                    <li><code>Producto</code> - Búsqueda normal</li>
+                    <li><code>admin</code> - Buscar usuarios admin</li>
+                    <li><code>electronics</code> - Buscar por categoría</li>
+                </ul>
+            </div>
+            
+            <div class="alert alert-info">
+                <strong>Nota:</strong> El WAF debería bloquear las consultas maliciosas mientras permite las legítimas.
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📊</span> Resultados Esperados</h2>
+            <div class="alert alert-success">
+                <strong>Comportamiento normal:</strong> Búsquedas legítimas muestran resultados filtrados
+            </div>
+            <div class="alert alert-danger">
+                <strong>Comportamiento bloqueado:</strong> Consultas SQL Injection son bloqueadas por el WAF
+            </div>
+            <div class="alert alert-warning">
+                <strong>Comportamiento vulnerable:</strong> Si el WAF no está configurado, las consultas maliciosas podrían ejecutarse
+            </div>
+        </div>
+    </div>
+</body>
+</html>

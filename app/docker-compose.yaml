@@ -1,24 +1,33 @@
-version: "3.9"
+version: '3.8'
 
 services:
-  webapp:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: webapp
-    restart: always
+  web-app:
+    build: .
+    ports:
+      - "3000:3000"
     environment:
       - NODE_ENV=production
-      - APP_NAME=WebSecureDemo
+      - PORT=3000
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "healthcheck.js"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    volumes:
+      - ./logs:/usr/src/app/logs
+    
+  # Replica for load balancing testing
+  web-app-replica:
+    build: .
     ports:
-      - "3000:3000"   # Esto puede eliminarse en AWS (ALB usará el puerto privado)
-    deploy:
-      replicas: 3      # Simula múltiples instancias detrás del ALB
-      restart_policy:
-        condition: on-failure
-    networks:
-      - internal_net
+      - "3001:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - INSTANCE_ID=replica-1
+    restart: unless-stopped
 
-networks:
-  internal_net:
-    driver: bridge
+volumes:
+  app-data:

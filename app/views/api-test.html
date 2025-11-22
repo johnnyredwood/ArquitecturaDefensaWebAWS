@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pruebas API REST - AWS WAF Demo</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="nav-breadcrumb">
+            <a href="/"><span class="icon">🏠</span> Inicio</a>
+            <span class="icon">›</span>
+            <span>Pruebas API REST</span>
+        </div>
+
+        <div class="header">
+            <h1>🌐 Pruebas API REST</h1>
+            <p>Testea diferentes métodos HTTP y validación de entrada en APIs</p>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">🔄</span> Pruebas de Métodos HTTP</h2>
+            <p>Prueba diferentes métodos REST contra la API:</p>
+            
+            <div class="api-buttons">
+                <button onclick="apiGet()" class="btn btn-success">
+                    <span class="icon">📥</span> GET
+                </button>
+                <button onclick="apiPost()" class="btn btn-secondary">
+                    <span class="icon">📤</span> POST
+                </button>
+                <button onclick="apiPut()" class="btn btn-warning">
+                    <span class="icon">✏️</span> PUT
+                </button>
+                <button onclick="apiDelete()" class="btn btn-danger">
+                    <span class="icon">🗑️</span> DELETE
+                </button>
+            </div>
+
+            <div class="result-container">
+                <div class="result-header">
+                    <h3><span class="icon">📊</span> Resultado:</h3>
+                </div>
+                <pre id="output">Presiona un botón para ver los resultados...</pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">💻</span> Prueba Command Injection</h2>
+            <p>Simula inyección de comandos en un campo de entrada:</p>
+            
+            <form action="/ping" method="POST" class="form-group">
+                <label for="host">Host para ping:</label>
+                <input type="text" id="host" name="host" class="form-control" 
+                       placeholder="ej. google.com o ; cat /etc/passwd" required>
+                <button type="submit" class="btn btn-danger" style="margin-top: 1rem;">
+                    <span class="icon">🖥️</span> Ejecutar Ping
+                </button>
+            </form>
+            
+            <div class="alert alert-warning">
+                <strong>⚠️ Pruebas peligrosas:</strong> 
+                <code>; ls -la</code>, <code>| cat /etc/passwd</code>, <code>&amp;&amp; whoami</code>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">📋</span> Comandos curl para Testing</h2>
+            <div class="test-examples">
+                <pre>
+# GET Request
+curl http://localhost:3000/api/item/123
+
+# POST Request  
+curl -X POST http://localhost:3000/api/item \
+  -H "Content-Type: application/json" \
+  -d '{"name":"test","value":123}'
+
+# PUT Request
+curl -X PUT http://localhost:3000/api/item/123 \
+  -H "Content-Type: application/json" \
+  -d '{"updated":true}'
+
+# DELETE Request
+curl -X DELETE http://localhost:3000/api/item/123
+
+# Command Injection Test
+curl -X POST http://localhost:3000/ping \
+  -d "host=;cat /etc/passwd"
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function apiGet() {
+            fetch('/api/item/123')
+                .then(r => r.json())
+                .then(d => document.getElementById('output').innerText = JSON.stringify(d, null, 2));
+        }
+
+        function apiPost() {
+            fetch('/api/item', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: "Nuevo item", time: Date.now() })
+            })
+            .then(r => r.json())
+            .then(d => document.getElementById('output').innerText = JSON.stringify(d, null, 2));
+        }
+
+        function apiPut() {
+            fetch('/api/item/123', {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ updated: true })
+            })
+            .then(r => r.json())
+            .then(d => document.getElementById('output').innerText = JSON.stringify(d, null, 2));
+        }
+
+        function apiDelete() {
+            fetch('/api/item/123', { method: "DELETE" })
+                .then(r => r.json())
+                .then(d => document.getElementById('output').innerText = JSON.stringify(d, null, 2));
+        }
+    </script>
+</body>
+</html>

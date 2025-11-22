@@ -1,11 +1,14 @@
 variable "vpc_id" {
-  type = string
+  description = "ID de la VPC"
+  type        = string
 }
 
 variable "private_subnets" {
-  type = list(string)
+  description = "Lista de subredes privadas"
+  type        = list(string)
 }
 
 variable "project_name" {
-  type = string
+  description = "Nombre del proyecto"
+  type        = string
 }

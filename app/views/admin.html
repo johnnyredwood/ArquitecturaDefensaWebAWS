@@ -1,34 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Admin - Área Restringida</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área Administrativa - AWS WAF Demo</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <h1>Zona Administrativa</h1>
+    <div class="container">
+        <div class="nav-breadcrumb">
+            <a href="/">Inicio</a>
+            <span class="icon">›</span>
+            <span>Área Administrativa</span>
+        </div>
 
-    <p>
-        Esta es una página simulada de administración.  
-        Es ideal para probar reglas del WAF como:
-    </p>
+        <div class="header">
+            <h1>Zona Administrativa</h1>
+            <p>Área restringida para pruebas de control de acceso y protección WAF</p>
+        </div>
 
-    <ul>
-        <li>Bloqueo por IP</li>
-        <li>Geo-blocking</li>
-        <li>Bloqueo de patrones</li>
-        <li>Acceso solo permitido desde ciertas IP privadas</li>
-    </ul>
+        <div class="card">
+            <h2>Panel de Administración</h2>
+            <p>Esta es una página simulada de administración para probar reglas del WAF como:</p>
+            
+            <div class="test-examples">
+                <ul>
+                    <li><strong>Bloqueo por IP:</strong> Restricción por direcciones IP específicas</li>
+                    <li><strong>Geo-blocking:</strong> Bloqueo por ubicación geográfica</li>
+                    <li><strong>Bloqueo de patrones:</strong> Detección de acceso a rutas administrativas</li>
+                    <li><strong>Control de acceso:</strong> Solo IPs autorizadas pueden acceder</li>
+                </ul>
+            </div>
+        </div>
 
-    <h3>Información sensible simulada:</h3>
-    <pre>
+        <div class="card">
+            <h2>Información del Sistema</h2>
+            <div class="result-content">
+                <pre>
 {
+  "systemStatus": "EN LINEA",
   "adminUser": "root",
-  "lastLogin": "2025-01-01",
-  "systemStatus": "OK",
-  "activeConnections": 42
+  "lastLogin": "2025-01-01T10:30:00Z",
+  "activeConnections": 42,
+  "serverUptime": "15 días, 4 horas",
+  "memoryUsage": "68%",
+  "cpuLoad": "45%",
+  "securityLevel": "ALTO",
+  "wafStatus": "ACTIVADO",
+  "firewallStatus": "ACTIVADO"
 }
-    </pre>
+                </pre>
+            </div>
+            
+            <div class="alert alert-info">
+                <strong>Esta área debería estar protegida por:</strong>
+                <ul style="margin-top: 0.5rem;">
+                    <li>WAF con reglas de IP whitelist</li>
+                    <li>Autenticación de dos factores</li>
+                    <li>Rate limiting estricto</li>
+                    <li>Monitoreo de actividades sospechosas</li>
+                </ul>
+            </div>
+        </div>
 
-    <a href="/">Volver al inicio</a>
+        <div class="card">
+            <h2>Pruebas de Seguridad</h2>
+            <div class="test-examples">
+                <p><strong>Pruebas recomendadas para esta área:</strong></p>
+                <ul>
+                    <li>Acceso desde IPs no autorizadas</li>
+                    <li>Intentos de fuerza bruta al panel admin</li>
+                    <li>Uso de user-agents sospechosos</li>
+                    <li>Acceso desde ubicaciones geográficas bloqueadas</li>
+                    <li>Scanning de rutas administrativas</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

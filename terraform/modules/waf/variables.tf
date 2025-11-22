@@ -1,7 +1,9 @@
 variable "alb_arn" {
-  type = string
+  description = "ARN del Application Load Balancer"
+  type        = string
 }
 
 variable "project_name" {
-  type = string
+  description = "Nombre del proyecto"
+  type        = string
 }

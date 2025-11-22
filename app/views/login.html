@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pruebas Rate Limiting - AWS WAF Demo</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="nav-breadcrumb">
+            <a href="/">Inicio</a>
+            <span class="icon">›</span>
+            <span>Pruebas de Login</span>
+        </div>
+
+        <div class="header">
+            <h1>Pruebas de Rate Limiting</h1>
+            <p>Simula ataques de fuerza bruta y prueba la protección del WAF</p>
+        </div>
+
+        <div class="card">
+            <h2>Formulario de Login</h2>
+            <p>Intenta múltiples login rápidos para probar el rate limiting:</p>
+            
+            <form action="/login" method="POST" class="form-group">
+                <div class="form-group">
+                    <label for="user">Usuario:</label>
+                    <input type="text" id="user" name="user" class="form-control" 
+                           placeholder="Ingresa usuario" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="pass">Contraseña:</label>
+                    <input type="password" id="pass" name="pass" class="form-control" 
+                           placeholder="Ingresa contraseña" required>
+                </div>
+                
+                <button type="submit" class="btn btn-warning" style="width: 100%;">
+                    Intentar Login
+                </button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Instrucciones de Prueba</h2>
+            <div class="test-examples">
+                <p><strong>Para probar rate limiting:</strong></p>
+                <ul>
+                    <li>Envía el formulario múltiples veces rápidamente</li>
+                    <li>Usa herramientas como curl en bucle</li>
+                    <li>Prueba desde diferentes navegadores/sesiones</li>
+                    <li>Intenta con diferentes combinaciones de credenciales</li>
+                </ul>
+                
+                <p><strong>Ejemplos de credenciales para probar:</strong></p>
+                <ul>
+                    <li><code>admin / password123</code></li>
+                    <li><code>' OR '1'='1 / anything</code> (SQL Injection)</li>
+                    <li><code>test / test</code></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Protección Esperada</h2>
+            <div class="alert alert-info">
+                <strong>Rate Limiting:</strong> El WAF debería limitar a ~5-10 intentos por minuto por IP
+            </div>
+            <div class="alert alert-success">
+                <strong>Comportamiento normal:</strong> Primeros intentos pasan al servidor
+            </div>
+            <div class="alert alert-danger">
+                <strong>Comportamiento bloqueado:</strong> Intentos excesivos reciben error 429 (Too Many Requests)
+            </div>
+            <div class="alert alert-warning">
+                <strong>Monitoreo:</strong> Los intentos fallidos son registrados para análisis de seguridad
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Script de Prueba Rápida</h2>
+            <div class="test-examples">
+                <p>Usa este comando curl para pruebas rápidas:</p>
+                <pre>for i in {1..15}; do
+  curl -X POST http://localhost:3000/login \
+    -d "user=test$i&pass=password$i" \
+    -H "Content-Type: application/x-www-form-urlencoded"
+  echo " - Attempt $i"
+done</pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

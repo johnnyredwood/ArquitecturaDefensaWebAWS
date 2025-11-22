@@ -1,0 +1,12 @@
+[
+  {"id": 1, "name": "Producto A", "price": 100, "category": "electronics"},
+  {"id": 2, "name": "Producto B", "price": 200, "category": "books"},
+  {"id": 3, "name": "Producto C", "price": 150, "category": "home"},
+  {"id": 4, "name": "Producto D", "price": 300, "category": "electronics"},
+  {"id": 5, "name": "Producto E", "price": 250, "category": "books"},
+  {"id": 6, "name": "admin", "price": 0, "category": "system"},
+  {"id": 7, "name": "user", "price": 0, "category": "system"},
+  {"id": 8, "name": "test' OR '1'='1", "price": 999, "category": "hack"},
+  {"id": 9, "name": "producto normal", "price": 50, "category": "general"},
+  {"id": 10, "name": "<script>alert('xss')</script>", "price": 666, "category": "hack"}
+]
