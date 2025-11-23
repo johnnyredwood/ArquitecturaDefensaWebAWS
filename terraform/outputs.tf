@@ -19,8 +19,14 @@ output "waf_arn" {
   value = module.waf.waf_arn
 }
 
-output "firewall_arn" {
-  value = module.network_firewall.firewall_arn
+output "nacl_public_id" {
+  description = "ID del Network ACL público (Firewall de red)"
+  value       = module.nacl.public_nacl_id
+}
+
+output "nacl_private_id" {
+  description = "ID del Network ACL privado (Firewall de red)"
+  value       = module.nacl.private_nacl_id
 }
 
 output "ec2_ids" {

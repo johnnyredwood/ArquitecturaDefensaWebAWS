@@ -17,11 +17,14 @@ module "waf" {
   project_name = var.project_name
 }
 
-module "network_firewall" {
-  source         = "./modules/network-firewall"
-  vpc_id         = module.vpc.vpc_id
+# Network ACLs - Firewall de red a nivel de subnet (GRATIS)
+module "nacl" {
+  source          = "./modules/nacl"
+  vpc_id          = module.vpc.vpc_id
+  vpc_cidr        = module.vpc.vpc_cidr
+  public_subnets  = module.vpc.public_subnets
   private_subnets = module.vpc.private_subnets
-  project_name   = var.project_name
+  project_name    = var.project_name
 }
 
 module "ec2_app" {
