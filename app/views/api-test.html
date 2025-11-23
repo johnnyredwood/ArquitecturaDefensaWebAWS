@@ -9,45 +9,45 @@
 <body>
     <div class="container">
         <div class="nav-breadcrumb">
-            <a href="/"><span class="icon">🏠</span> Inicio</a>
+            <a href="/">Inicio</a>
             <span class="icon">›</span>
             <span>Pruebas API REST</span>
         </div>
 
         <div class="header">
-            <h1>🌐 Pruebas API REST</h1>
+            <h1>Pruebas API REST</h1>
             <p>Testea diferentes métodos HTTP y validación de entrada en APIs</p>
         </div>
 
         <div class="card">
-            <h2><span class="icon">🔄</span> Pruebas de Métodos HTTP</h2>
+            <h2>Pruebas de Métodos HTTP</h2>
             <p>Prueba diferentes métodos REST contra la API:</p>
             
             <div class="api-buttons">
                 <button onclick="apiGet()" class="btn btn-success">
-                    <span class="icon">📥</span> GET
+                    GET
                 </button>
                 <button onclick="apiPost()" class="btn btn-secondary">
-                    <span class="icon">📤</span> POST
+                    POST
                 </button>
                 <button onclick="apiPut()" class="btn btn-warning">
-                    <span class="icon">✏️</span> PUT
+                    PUT
                 </button>
                 <button onclick="apiDelete()" class="btn btn-danger">
-                    <span class="icon">🗑️</span> DELETE
+                    DELETE
                 </button>
             </div>
 
             <div class="result-container">
                 <div class="result-header">
-                    <h3><span class="icon">📊</span> Resultado:</h3>
+                    <h3>Resultado:</h3>
                 </div>
-                <pre id="output">Presiona un botón para ver los resultados...</pre>
+                <pre id="output">Presiona un botón para ver los resultados</pre>
             </div>
         </div>
 
         <div class="card">
-            <h2><span class="icon">💻</span> Prueba Command Injection</h2>
+            <h2>Prueba Command Injection</h2>
             <p>Simula inyección de comandos en un campo de entrada:</p>
             
             <form action="/ping" method="POST" class="form-group">
@@ -55,18 +55,18 @@
                 <input type="text" id="host" name="host" class="form-control" 
                        placeholder="ej. google.com o ; cat /etc/passwd" required>
                 <button type="submit" class="btn btn-danger" style="margin-top: 1rem;">
-                    <span class="icon">🖥️</span> Ejecutar Ping
+                    Ejecutar Ping
                 </button>
             </form>
             
             <div class="alert alert-warning">
-                <strong>⚠️ Pruebas peligrosas:</strong> 
+                <strong>Pruebas peligrosas:</strong> 
                 <code>; ls -la</code>, <code>| cat /etc/passwd</code>, <code>&amp;&amp; whoami</code>
             </div>
         </div>
 
         <div class="card">
-            <h2><span class="icon">📋</span> Comandos curl para Testing</h2>
+            <h2>Comandos curl para Testing</h2>
             <div class="test-examples">
                 <pre>
 # GET Request

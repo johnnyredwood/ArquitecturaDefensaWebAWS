@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo de Seguridad Web - AWS WAF</title>
+    <title>Demo de Seguridad Web - AWS WAF Firewall</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
     <div class="container">
         <header class="header">
             <h1>Aplicación de Pruebas de Seguridad Web</h1>
-            <p>Demostración de arquitectura de defensa web con ALB, AWS WAF y Firewall de Red en AWS</p>
+            <p>Por John Ochoa Abad y Daniel  Martínez</p>
+            <p>Aplicación para demostración de arquitectura de defensa web con ALB, AWS WAF y Firewall de Red en AWS</p>
         </header>
 
         <div class="card-grid">
@@ -18,7 +19,7 @@
                 <h2>Pruebas de Búsqueda</h2>
                 <p>Prueba vulnerabilidades de SQL Injection en formularios de búsqueda.</p>
                 <div class="alert alert-info">
-                    <strong>Ejemplo:</strong> <code>' OR '1'='1</code> o <code>'; DROP TABLE users--</code>
+                    <strong>Ejemplo:</strong> <code>' OR '1'='1</code> o <code>'; DROP TABLE users--</code> o <code>'; UPDATE users SET role='admin' WHERE username='john' --</code> o <code>' UNION SELECT username, password FROM admin --</code>
                 </div>
                 <a href="/search" class="btn">
                     Probar SQL Injection
@@ -29,7 +30,7 @@
                 <h2>Pruebas de Login</h2>
                 <p>Simula ataques de fuerza bruta y prueba el rate limiting.</p>
                 <div class="alert alert-warning">
-                    <strong>Ejemplo:</strong> Múltiples intentos de login desde la misma IP
+                    <strong>Ejemplo:</strong> Múltiples intentos de login desde la misma IP (configurado para máximo 10)
                 </div>
                 <a href="/login" class="btn btn-warning">
                     Probar Fuerza Bruta

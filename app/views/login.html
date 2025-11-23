@@ -48,9 +48,8 @@
                 <p><strong>Para probar rate limiting:</strong></p>
                 <ul>
                     <li>Envía el formulario múltiples veces rápidamente</li>
-                    <li>Usa herramientas como curl en bucle</li>
-                    <li>Prueba desde diferentes navegadores/sesiones</li>
-                    <li>Intenta con diferentes combinaciones de credenciales</li>
+                    <li>Probar desde diferentes navegadores/sesiones</li>
+                    <li>Intenta con intentos múltiples desde misma IP</li>
                 </ul>
                 
                 <p><strong>Ejemplos de credenciales para probar:</strong></p>
@@ -65,16 +64,13 @@
         <div class="card">
             <h2>Protección Esperada</h2>
             <div class="alert alert-info">
-                <strong>Rate Limiting:</strong> El WAF debería limitar a ~5-10 intentos por minuto por IP
+                <strong>Rate Limiting:</strong> El WAF debería limitar a 10 intentos por minuto por IP
             </div>
             <div class="alert alert-success">
                 <strong>Comportamiento normal:</strong> Primeros intentos pasan al servidor
             </div>
             <div class="alert alert-danger">
                 <strong>Comportamiento bloqueado:</strong> Intentos excesivos reciben error 429 (Too Many Requests)
-            </div>
-            <div class="alert alert-warning">
-                <strong>Monitoreo:</strong> Los intentos fallidos son registrados para análisis de seguridad
             </div>
         </div>
 
