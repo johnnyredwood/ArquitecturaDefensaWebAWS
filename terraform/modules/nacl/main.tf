@@ -33,12 +33,12 @@ resource "aws_network_acl" "public" {
     to_port    = 65535
   }
 
-  # Regla de entrada para bloquear rangos de IPs sospechosas (ejemplo)
+  # Regla de entrada para bloquear rangos de IPs sospechosas
   ingress {
     protocol   = -1
     rule_no    = 90
     action     = "deny"
-    cidr_block = "192.168.100.231/24"
+    cidr_block = "181.199.59.14/32"
     from_port  = 0
     to_port    = 0
   }
