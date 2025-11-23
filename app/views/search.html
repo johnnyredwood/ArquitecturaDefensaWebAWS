@@ -38,11 +38,11 @@
             <div class="test-examples">
                 <p><strong>Pruebas de SQL Injection:</strong></p>
                 <ul>
-                    <li><code>' OR '1'='1</code> - Retorna todos los registros</li>
+                    <li><code>' OR '1'='1</code> - Condición siempre verdadera</li>
                     <li><code>'; DROP TABLE users--</code> - Inyección destructiva</li>
                     <li><code>' UNION SELECT username, password FROM users--</code> - Extracción de datos</li>
-                    <li><code>admin' --</code> - Bypass de autenticación</li>
-                    <li><code>' AND 1=1 --</code> - Condición siempre verdadera</li>
+                    <li><code>'; UPDATE users SET role='admin' WHERE username='john' --</code> - Bypass de admin</li>
+                    <li><code>' UNION SELECT username, password FROM admin --</code> - Acceder a datos restringidos</li>
                 </ul>
                 
                 <p><strong>Búsquedas legítimas:</strong></p>
@@ -64,9 +64,6 @@
             </div>
             <div class="alert alert-danger">
                 <strong>Comportamiento bloqueado:</strong> Consultas SQL Injection son bloqueadas por el WAF
-            </div>
-            <div class="alert alert-warning">
-                <strong>Comportamiento vulnerable:</strong> Si el WAF no está configurado, las consultas maliciosas podrían ejecutarse
             </div>
         </div>
     </div>

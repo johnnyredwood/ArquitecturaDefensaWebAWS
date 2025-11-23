@@ -38,7 +38,7 @@ resource "aws_network_acl" "public" {
     protocol   = -1
     rule_no    = 90
     action     = "deny"
-    cidr_block = "192.0.2.0/24" # Ejemplo de IP bloqueada
+    cidr_block = "192.168.100.231/24"
     from_port  = 0
     to_port    = 0
   }

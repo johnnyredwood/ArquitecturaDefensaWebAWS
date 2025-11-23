@@ -96,7 +96,8 @@ app.post("/search", (req, res) => {
 
   // Simulación: filtrar "base de datos" sin protección
   const results = database.filter(item =>
-    item.name.toLowerCase().includes(query.toLowerCase())
+    item.name.toLowerCase().includes(query.toLowerCase()) ||
+    item.category.toLowerCase().includes(query.toLowerCase())
   );
 
   res.send(`
