@@ -3,7 +3,7 @@ resource "aws_network_acl" "public" {
   vpc_id     = var.vpc_id
   subnet_ids = var.public_subnets
 
-  # Regla de entrada: Permitir HTTP
+  # Regla de entrada para permitir HTTP
   ingress {
     protocol   = "tcp"
     rule_no    = 100
@@ -13,7 +13,7 @@ resource "aws_network_acl" "public" {
     to_port    = 80
   }
 
-  # Regla de entrada: Permitir HTTPS
+  # Regla de entrada para permitir HTTPS
   ingress {
     protocol   = "tcp"
     rule_no    = 110
@@ -23,7 +23,7 @@ resource "aws_network_acl" "public" {
     to_port    = 443
   }
 
-  # Regla de entrada: Permitir respuestas ephemeral ports
+  # Regla de entrada para permitir respuestas ephemeral ports
   ingress {
     protocol   = "tcp"
     rule_no    = 120
@@ -33,7 +33,7 @@ resource "aws_network_acl" "public" {
     to_port    = 65535
   }
 
-  # Regla de entrada: Bloquear rangos de IPs sospechosas (ejemplo)
+  # Regla de entrada para bloquear rangos de IPs sospechosas (ejemplo)
   ingress {
     protocol   = -1
     rule_no    = 90
