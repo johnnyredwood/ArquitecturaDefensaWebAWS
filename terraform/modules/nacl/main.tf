@@ -59,6 +59,18 @@ resource "aws_network_acl" "public" {
   }
 }
 
+# Permitir ICMP ping solo desde mi IP
+resource "aws_network_acl_rule" "allow_icmp_my_ip" {
+  network_acl_id = aws_network_acl.public.id
+  rule_number    = 85
+  egress         = false
+  protocol       = "icmp"
+  rule_action    = "allow"
+  cidr_block     = "181.199.59.14/32"
+  icmp_type      = -1
+  icmp_code      = -1
+}
+
 # Network ACL para subnets privadas
 resource "aws_network_acl" "private" {
   vpc_id     = var.vpc_id
@@ -110,7 +122,7 @@ resource "aws_network_acl" "private" {
   }
 }
 
-# Reglas adicionales de protección contra ataques comunes
+# Reglas para evitar ICMP Flood
 resource "aws_network_acl_rule" "block_icmp_flood" {
   network_acl_id = aws_network_acl.public.id
   rule_number    = 95

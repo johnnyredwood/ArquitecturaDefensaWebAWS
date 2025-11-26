@@ -177,24 +177,41 @@ app.get("/read-file", (req, res) => {
 
 app.post("/ping", (req, res) => {
   const { host } = req.body;
+  const { exec } = require('child_process');
 
   console.log(`[Command Injection Test] Ping requested to: ${host}`);
 
-  res.send(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Resultado Ping</title>
-    </head>
-    <body>
-      <h3>Simulación de PING</h3>
-      <p>Comando recibido: <b>ping ${host}</b></p>
-      <i>(El WAF debería bloquear comandos peligrosos como: ; cat /etc/passwd, | ls, etc.)</i>
-      <br><br>
-      <a href="/api-test">Volver a pruebas API</a>
-    </body>
-    </html>
-  `);
+  // VULNERABLE: Ejecuta comando sin sanitización
+  const command = `ping -c 3 ${host}`;
+  
+  exec(command, (error, stdout, stderr) => {
+    const output = error ? stderr : stdout;
+    
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Resultado Ping</title>
+        <style>
+          body { font-family: monospace; padding: 20px; background: #f5f5f5; }
+          .output { background: #000; color: #0f0; padding: 15px; border-radius: 5px; }
+          .warning { color: red; margin: 20px 0; }
+        </style>
+      </head>
+      <body>
+        <h3>Resultado del Comando</h3>
+        <p>Comando ejecutado: <b>${command}</b></p>
+        <div class="output">
+          <pre>${output || 'Sin resultado'}</pre>
+        </div>
+        ${error ? '<p class="warning">El comando falló o fue malicioso</p>' : ''}
+        <i>(El WAF debería bloquear comandos peligrosos como: ; cat /etc/passwd, | ls, etc.)</i>
+        <br><br>
+        <a href="/api-test">Volver a pruebas API</a>
+      </body>
+      </html>
+    `);
+  });
 });
 
 app.post("/login", rateLimit, (req, res) => {
