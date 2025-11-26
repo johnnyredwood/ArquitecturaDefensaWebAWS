@@ -12,14 +12,7 @@ resource "aws_security_group" "ec2" {
     security_groups = [var.alb_sg_id]
   }
 
-  # SSH solo para troubleshooting
-  ingress {
-    description = "SSH"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # En producción restringir a tu IP
-  }
+  # SSH eliminado - se usa Session Manager en su lugar
 
   egress {
     from_port   = 0
@@ -39,10 +32,15 @@ resource "aws_launch_template" "web_app" {
   name_prefix   = "${var.project_name}-"
   image_id      = data.aws_ami.amazon_linux_2.id
   instance_type = "t3.micro"
+  key_name      = "llave"
+
+  iam_instance_profile {
+    name = aws_iam_instance_profile.ec2_profile.name
+  }
 
   network_interfaces {
-    associate_public_ip_address = false
-    security_groups             = [aws_security_group.ec2.id]
+    associate_public_ip_address = true
+    security_groups = [aws_security_group.ec2.id]
   }
 
   user_data = filebase64("${path.module}/user-data.sh")

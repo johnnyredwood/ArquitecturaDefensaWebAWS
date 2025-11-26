@@ -3,6 +3,16 @@ resource "aws_network_acl" "public" {
   vpc_id     = var.vpc_id
   subnet_ids = var.public_subnets
 
+  # Regla de entrada para bloquear otros accesos desde rangos IP sospechosas
+  ingress {
+    protocol   = -1
+    rule_no    = 90
+    action     = "deny"
+    cidr_block = "186.65.53.193/32"
+    from_port  = 0
+    to_port    = 0
+  }
+
   # Regla de entrada para permitir HTTP
   ingress {
     protocol   = "tcp"
@@ -31,16 +41,6 @@ resource "aws_network_acl" "public" {
     cidr_block = "0.0.0.0/0"
     from_port  = 1024
     to_port    = 65535
-  }
-
-  # Regla de entrada para bloquear rangos de IPs sospechosas
-  ingress {
-    protocol   = -1
-    rule_no    = 90
-    action     = "deny"
-    cidr_block = "181.199.59.14/32"
-    from_port  = 0
-    to_port    = 0
   }
 
   # Regla de salida: Permitir todo el tráfico saliente
