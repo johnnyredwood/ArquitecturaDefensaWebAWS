@@ -30,8 +30,16 @@ module "nacl" {
 module "ec2_app" {
   source          = "./modules/ec2"
   vpc_id          = module.vpc.vpc_id
-  private_subnets = module.vpc.public_subnets  # Usar subnets públicas para SSH directo
+  private_subnets = module.vpc.private_subnets  # Usar subnets privadas para mayor seguridad
   alb_sg_id       = module.alb.sg_alb
   project_name    = var.project_name
   target_group_arn = module.alb.target_group_arn
+}
+
+module "secrets" {
+  source          = "./modules/secrets"
+  project_name    = var.project_name
+  admin_username  = var.admin_username
+  admin_password  = var.admin_password
+  ec2_role_name   = module.ec2_app.ec2_role_name
 }

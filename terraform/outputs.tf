@@ -32,3 +32,14 @@ output "nacl_private_id" {
 output "ec2_ids" {
   value = module.ec2_app.instance_ids
 }
+
+output "secret_arn" {
+  description = "ARN del secret de AWS Secrets Manager"
+  value       = module.secrets.secret_arn
+  sensitive   = true
+}
+
+output "admin_login_url" {
+  description = "URL para acceder al login administrativo"
+  value       = "http://${module.alb.alb_dns_name}/admin-login"
+}

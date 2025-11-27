@@ -39,11 +39,14 @@ resource "aws_launch_template" "web_app" {
   }
 
   network_interfaces {
-    associate_public_ip_address = true
+    associate_public_ip_address = false
     security_groups = [aws_security_group.ec2.id]
   }
 
-  user_data = filebase64("${path.module}/user-data.sh")
+  user_data = base64encode(templatefile("${path.module}/user-data.sh", {
+    aws_region  = "us-east-1"
+    secret_name = "${var.project_name}-admin-credentials"
+  }))
 
   tag_specifications {
     resource_type = "instance"

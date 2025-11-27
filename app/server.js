@@ -1,8 +1,44 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+const { SecretsManagerClient, GetSecretValueCommand } = require("@aws-sdk/client-secrets-manager");
 
 const app = express();
+
+// AWS Secrets Manager client
+const secretsClient = new SecretsManagerClient({ 
+  region: process.env.AWS_REGION || "us-east-1" 
+});
+
+// Store admin credentials loaded from Secrets Manager
+const ADMIN_CREDENTIALS = {
+  username: null,
+  password: null
+};
+
+// Load admin credentials from Secrets Manager
+async function loadAdminCredentials() {
+  try {
+    const secretName = process.env.SECRET_NAME || "proyecto-redes-admin-credentials";
+    const command = new GetSecretValueCommand({ SecretId: secretName });
+    const response = await secretsClient.send(command);
+    
+    if (response.SecretString) {
+      const secret = JSON.parse(response.SecretString);
+      ADMIN_CREDENTIALS.username = secret.username;
+      ADMIN_CREDENTIALS.password = secret.password;
+      console.log("[Secrets Manager] Admin credentials loaded successfully");
+    } else {
+      throw new Error("SecretString is empty");
+    }
+  } catch (error) {
+    console.error("[Secrets Manager] Error loading credentials:", error.message);
+    // Use fallback credentials for local development
+    ADMIN_CREDENTIALS.username = "admin";
+    ADMIN_CREDENTIALS.password = "local123";
+    console.log("[Secrets Manager] Using fallback credentials for development");
+  }
+}
 
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -28,6 +64,55 @@ const generateId = () => {
 const loginAttempts = new Map();
 const MAX_ATTEMPTS = 10;
 const WINDOW_MS = 15 * 60 * 1000; // 15 minutes
+
+// Admin session management
+const adminSessions = new Map();
+const ADMIN_SESSION_TIMEOUT = 15 * 60 * 1000; // 15 minutes
+
+// Admin rate limiting (stricter than regular login)
+const adminLoginAttempts = new Map();
+const ADMIN_MAX_ATTEMPTS = 3;
+const ADMIN_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
+
+// Admin rate limit middleware
+const adminRateLimit = (req, res, next) => {
+  const ip = req.ip;
+  const now = Date.now();
+  const windowStart = now - ADMIN_WINDOW_MS;
+  
+  if (!adminLoginAttempts.has(ip)) {
+    adminLoginAttempts.set(ip, []);
+  }
+  
+  const attempts = adminLoginAttempts.get(ip).filter(time => time > windowStart);
+  adminLoginAttempts.set(ip, attempts);
+  
+  if (attempts.length >= ADMIN_MAX_ATTEMPTS) {
+    return res.status(429).send("Demasiados intentos de login. Espere 15 minutos.");
+  }
+  
+  next();
+};
+
+// Middleware to require admin authentication
+const requireAdminAuth = (req, res, next) => {
+  const sessionId = req.headers.cookie?.split('adminSession=')[1]?.split(';')[0];
+  
+  if (!sessionId || !adminSessions.has(sessionId)) {
+    return res.redirect('/admin-login');
+  }
+  
+  const session = adminSessions.get(sessionId);
+  const now = Date.now();
+  
+  if (now - session.lastAccess > ADMIN_SESSION_TIMEOUT) {
+    adminSessions.delete(sessionId);
+    return res.redirect('/admin-login');
+  }
+  
+  session.lastAccess = now;
+  next();
+};
 
 // Rate limiting middleware
 const rateLimit = (req, res, next) => {
@@ -73,8 +158,61 @@ app.get("/api-test", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "api-test.html"));
 });
 
-// Simulación de pantalla admin
-app.get("/admin", (req, res) => {
+// Admin login page
+app.get("/admin-login", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "admin-login.html"));
+});
+
+// Admin login POST handler
+app.post("/admin-login", adminRateLimit, (req, res) => {
+  const { username, password } = req.body;
+  const ip = req.ip;
+  
+  // Record login attempt
+  if (!adminLoginAttempts.has(ip)) {
+    adminLoginAttempts.set(ip, []);
+  }
+  adminLoginAttempts.get(ip).push(Date.now());
+  
+  console.log(`[Admin Login] Attempt from IP: ${ip}, Username: ${username}`);
+  
+  // Validate credentials against Secrets Manager values
+  if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+    // Create session
+    const sessionId = generateId();
+    adminSessions.set(sessionId, {
+      username,
+      loginTime: Date.now(),
+      lastAccess: Date.now(),
+      ip
+    });
+    
+    // Clear failed attempts on successful login
+    adminLoginAttempts.delete(ip);
+    
+    // Set session cookie
+    res.setHeader('Set-Cookie', `adminSession=${sessionId}; HttpOnly; Path=/; Max-Age=900`);
+    
+    console.log(`[Admin Login] Success for user: ${username}`);
+    return res.redirect('/admin');
+  }
+  
+  console.log(`[Admin Login] Failed for user: ${username}`);
+  res.status(401).send("Credenciales inválidas");
+});
+
+// Admin logout
+app.get("/admin-logout", (req, res) => {
+  const sessionId = req.headers.cookie?.split('adminSession=')[1]?.split(';')[0];
+  if (sessionId) {
+    adminSessions.delete(sessionId);
+  }
+  res.setHeader('Set-Cookie', 'adminSession=; HttpOnly; Path=/; Max-Age=0');
+  res.redirect('/admin-login');
+});
+
+// Simulación de pantalla admin (now protected)
+app.get("/admin", requireAdminAuth, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "admin.html"));
 });
 
@@ -281,9 +419,17 @@ app.delete("/api/item/:id", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Servidor de pruebas WAF corriendo en puerto ${PORT}`);
-  console.log(`Instancia: ${process.env.INSTANCE_ID || 'primary'}`);
-  console.log(`Accesible en: http://localhost:${PORT}`);
-  console.log(`Health check: http://localhost:${PORT}/health`);
+
+// Load credentials before starting server
+loadAdminCredentials().then(() => {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor de pruebas WAF corriendo en puerto ${PORT}`);
+    console.log(`Instancia: ${process.env.INSTANCE_ID || 'primary'}`);
+    console.log(`Accesible en: http://localhost:${PORT}`);
+    console.log(`Health check: http://localhost:${PORT}/health`);
+    console.log(`Admin login: http://localhost:${PORT}/admin-login`);
+  });
+}).catch(err => {
+  console.error("Failed to start server:", err);
+  process.exit(1);
 });
