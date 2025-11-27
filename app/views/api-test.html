@@ -47,25 +47,6 @@
         </div>
 
         <div class="card">
-            <h2>Prueba Code Injection</h2>
-            <p>Simula inyección de código JavaScript malicioso:</p>
-            
-            <form action="/eval" method="POST" class="form-group">
-                <label for="expression">Expresión JavaScript:</label>
-                <input type="text" id="expression" name="expression" class="form-control" 
-                       placeholder="ej. 2+2 o process.exit()" required>
-                <button type="submit" class="btn btn-danger" style="margin-top: 1rem;">
-                    Evaluar Expresión
-                </button>
-            </form>
-            
-            <div class="alert alert-warning">
-                <strong>Pruebas peligrosas:</strong> 
-                <code>process.exit()</code>, <code>require('fs')</code>, <code>global.process</code>
-            </div>
-        </div>
-
-        <div class="card">
             <h2>Comandos curl para Testing</h2>
             <div class="test-examples">
                 <pre>
@@ -84,10 +65,6 @@ curl -X PUT http://localhost:3000/api/item/123 \
 
 # DELETE Request
 curl -X DELETE http://localhost:3000/api/item/123
-
-# Code Injection Test
-curl -X POST http://localhost:3000/eval \
-  -d "expression=process.exit()"
                 </pre>
             </div>
         </div>

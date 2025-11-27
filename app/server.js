@@ -158,6 +158,11 @@ app.get("/api-test", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "api-test.html"));
 });
 
+// Página de code injection
+app.get("/code-injection", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "code-injection.html"));
+});
+
 // Admin login page
 app.get("/admin-login", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "admin-login.html"));
@@ -348,7 +353,7 @@ app.post("/eval", (req, res) => {
       ${error ? '<p class="warning">La expresión causó un error o fue maliciosa</p>' : ''}
       <i>(El WAF debería bloquear expresiones peligrosas como: process.exit(), require('fs'), etc.)</i>
       <br><br>
-      <a href="/api-test">Volver a pruebas API</a>
+      <a href="/code-injection">Volver a Code Injection</a> | <a href="/">Inicio</a>
     </body>
     </html>
   `);

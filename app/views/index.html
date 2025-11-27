@@ -69,19 +69,19 @@
                     <input type="text" name="comment" class="form-control" 
                            placeholder="Escribe un comentario (prueba XSS)" required>
                     <button type="submit" class="btn" style="margin-top: 0.5rem; width: 100%;">
-                        <span class="icon">📨</span> Enviar Comentario
+                        Enviar Comentario
                     </button>
                 </form>
             </div>
 
             <div class="card">
-                <h2>Command Injection</h2>
-                <p>Prueba inyección de comandos del sistema operativo.</p>
+                <h2>Code Injection</h2>
+                <p>Prueba inyección de código JavaScript malicioso.</p>
                 <div class="alert alert-danger">
-                    <strong>Ejemplo:</strong> <code>; cat /etc/passwd</code> o <code>| ls -la</code>
+                    <strong>Ejemplo:</strong> <code>process.exit()</code> o <code>require('fs')</code>
                 </div>
-                <a href="/api-test" class="btn btn-danger">
-                    Probar Command Injection
+                <a href="/code-injection" class="btn btn-danger">
+                    Probar Code Injection
                 </a>
             </div>
         </div>

