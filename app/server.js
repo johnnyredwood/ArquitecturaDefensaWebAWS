@@ -4,7 +4,6 @@ const fs = require("fs");
 
 const app = express();
 
-// Basic security headers
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
@@ -175,43 +174,46 @@ app.get("/read-file", (req, res) => {
   }
 });
 
-app.post("/ping", (req, res) => {
-  const { host } = req.body;
-  const { exec } = require('child_process');
+app.post("/eval", (req, res) => {
+  const { expression } = req.body;
 
-  console.log(`[Command Injection Test] Ping requested to: ${host}`);
+  console.log(`[Code Injection Test] Expression received: ${expression}`);
 
-  // VULNERABLE: Ejecuta comando sin sanitización
-  const command = `ping -c 3 ${host}`;
+  let result;
+  let error = null;
   
-  exec(command, (error, stdout, stderr) => {
-    const output = error ? stderr : stdout;
+  try {
+    // Vulnerable: eval() ejecuta código JavaScript sin sanitización
+    result = eval(expression);
+  } catch (err) {
+    error = err.message;
+    result = null;
+  }
     
-    res.send(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Resultado Ping</title>
-        <style>
-          body { font-family: monospace; padding: 20px; background: #f5f5f5; }
-          .output { background: #000; color: #0f0; padding: 15px; border-radius: 5px; }
-          .warning { color: red; margin: 20px 0; }
-        </style>
-      </head>
-      <body>
-        <h3>Resultado del Comando</h3>
-        <p>Comando ejecutado: <b>${command}</b></p>
-        <div class="output">
-          <pre>${output || 'Sin resultado'}</pre>
-        </div>
-        ${error ? '<p class="warning">El comando falló o fue malicioso</p>' : ''}
-        <i>(El WAF debería bloquear comandos peligrosos como: ; cat /etc/passwd, | ls, etc.)</i>
-        <br><br>
-        <a href="/api-test">Volver a pruebas API</a>
-      </body>
-      </html>
-    `);
-  });
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Resultado de Evaluación</title>
+      <style>
+        body { font-family: monospace; padding: 20px; background: #f5f5f5; }
+        .output { background: #000; color: #0f0; padding: 15px; border-radius: 5px; }
+        .warning { color: red; margin: 20px 0; }
+      </style>
+    </head>
+    <body>
+      <h3>Resultado de la Expresión</h3>
+      <p>Expresión evaluada: <b>${expression}</b></p>
+      <div class="output">
+        <pre>${error ? 'ERROR: ' + error : 'Resultado: ' + JSON.stringify(result)}</pre>
+      </div>
+      ${error ? '<p class="warning">La expresión causó un error o fue maliciosa</p>' : ''}
+      <i>(El WAF debería bloquear expresiones peligrosas como: process.exit(), require('fs'), etc.)</i>
+      <br><br>
+      <a href="/api-test">Volver a pruebas API</a>
+    </body>
+    </html>
+  `);
 });
 
 app.post("/login", rateLimit, (req, res) => {

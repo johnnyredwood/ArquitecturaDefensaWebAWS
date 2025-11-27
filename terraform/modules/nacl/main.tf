@@ -59,18 +59,6 @@ resource "aws_network_acl" "public" {
   }
 }
 
-# Permitir ICMP ping solo desde mi IP
-resource "aws_network_acl_rule" "allow_icmp_my_ip" {
-  network_acl_id = aws_network_acl.public.id
-  rule_number    = 85
-  egress         = false
-  protocol       = "icmp"
-  rule_action    = "allow"
-  cidr_block     = "181.199.59.14/32"
-  icmp_type      = -1
-  icmp_code      = -1
-}
-
 # Network ACL para subnets privadas
 resource "aws_network_acl" "private" {
   vpc_id     = var.vpc_id
@@ -106,30 +94,58 @@ resource "aws_network_acl" "private" {
     to_port    = 22
   }
 
-  # Regla de salida: Permitir todo el tráfico saliente
+  # Regla de salida: Permitir tráfico hacia la VPC
   egress {
     protocol   = -1
     rule_no    = 100
     action     = "allow"
-    cidr_block = "0.0.0.0/0"
+    cidr_block = var.vpc_cidr
     from_port  = 0
     to_port    = 0
+  }
+
+  # Regla de salida: Permitir DNS (UDP 53)
+  egress {
+    protocol   = "udp"
+    rule_no    = 110
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 53
+    to_port    = 53
+  }
+
+  # Regla de salida: Permitir HTTPS (443) para actualizaciones
+  egress {
+    protocol   = "tcp"
+    rule_no    = 120
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 443
+    to_port    = 443
+  }
+
+  # Regla de salida: Permitir HTTP (80) para repositorios
+  egress {
+    protocol   = "tcp"
+    rule_no    = 130
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 80
+    to_port    = 80
+  }
+
+  # Regla de salida: Permitir ephemeral ports para respuestas
+  egress {
+    protocol   = "tcp"
+    rule_no    = 140
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 1024
+    to_port    = 65535
   }
 
   tags = {
     Name    = "${var.project_name}-private-nacl"
     Project = var.project_name
   }
-}
-
-# Reglas para evitar ICMP Flood
-resource "aws_network_acl_rule" "block_icmp_flood" {
-  network_acl_id = aws_network_acl.public.id
-  rule_number    = 95
-  egress         = false
-  protocol       = "icmp"
-  rule_action    = "deny"
-  cidr_block     = "0.0.0.0/0"
-  icmp_type      = -1
-  icmp_code      = -1
 }
