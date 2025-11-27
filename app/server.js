@@ -326,7 +326,6 @@ app.post("/eval", (req, res) => {
   let error = null;
   
   try {
-    // Vulnerable: eval() ejecuta código JavaScript sin sanitización
     result = eval(expression);
   } catch (err) {
     error = err.message;
@@ -352,6 +351,48 @@ app.post("/eval", (req, res) => {
       </div>
       ${error ? '<p class="warning">La expresión causó un error o fue maliciosa</p>' : ''}
       <i>(El WAF debería bloquear expresiones peligrosas como: process.exit(), require('fs'), etc.)</i>
+      <br><br>
+      <a href="/code-injection">Volver a Code Injection</a> | <a href="/">Inicio</a>
+    </body>
+    </html>
+  `);
+});
+
+app.post("/shell", (req, res) => {
+  const { command } = req.body;
+
+  console.log(`[Command Injection Test] Command received: ${command}`);
+
+  let output;
+  let error = null;
+  
+  try {
+    const { execSync } = require('child_process');
+    output = execSync(command, { timeout: 5000 }).toString();
+  } catch (err) {
+    error = err.message;
+    output = null;
+  }
+    
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Resultado de Comando Shell</title>
+      <style>
+        body { font-family: monospace; padding: 20px; background: #f5f5f5; }
+        .output { background: #000; color: #0f0; padding: 15px; border-radius: 5px; }
+        .warning { color: red; margin: 20px 0; }
+      </style>
+    </head>
+    <body>
+      <h3>Resultado del Comando</h3>
+      <p>Comando ejecutado: <b>${command}</b></p>
+      <div class="output">
+        <pre>${error ? 'ERROR: ' + error : output}</pre>
+      </div>
+      ${error ? '<p class="warning">El comando causó un error o fue bloqueado</p>' : ''}
+      <i>(El WAF debería bloquear comandos shell peligrosos como: cat, ls, whoami, etc.)</i>
       <br><br>
       <a href="/code-injection">Volver a Code Injection</a> | <a href="/">Inicio</a>
     </body>

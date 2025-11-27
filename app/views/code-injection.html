@@ -20,7 +20,7 @@
         </div>
 
         <div class="card">
-            <h2>Prueba Code Injection</h2>
+            <h2>Prueba Code Injection (JavaScript)</h2>
             <p>Simula inyección de código JavaScript malicioso:</p>
             
             <form action="/eval" method="POST" class="form-group">
@@ -28,13 +28,32 @@
                 <input type="text" id="expression" name="expression" class="form-control" 
                        placeholder="ej. 2+2 o process.exit()" required>
                 <button type="submit" class="btn btn-danger" style="margin-top: 1rem;">
-                    Evaluar Expresión
+                    Evaluar JavaScript
                 </button>
             </form>
             
             <div class="alert alert-warning" style="margin-top: 1rem;">
                 <strong>Pruebas peligrosas:</strong> 
                 <code>process.exit()</code>, <code>require('fs')</code>, <code>global.process</code>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Prueba Command Injection (Shell)</h2>
+            <p>Simula ejecución directa de comandos shell:</p>
+            
+            <form action="/shell" method="POST" class="form-group">
+                <label for="command">Comando Shell:</label>
+                <input type="text" id="command" name="command" class="form-control" 
+                       placeholder="ej. ls -la o whoami" required>
+                <button type="submit" class="btn btn-danger" style="margin-top: 1rem;">
+                    Ejecutar Comando
+                </button>
+            </form>
+            
+            <div class="alert alert-danger" style="margin-top: 1rem;">
+                <strong>Comandos peligrosos:</strong> 
+                <code>cat /etc/passwd</code>, <code>whoami</code>, <code>rm -rf /</code>
             </div>
         </div>
 
