@@ -17,7 +17,7 @@ module "waf" {
   project_name = var.project_name
 }
 
-# Network ACLs - Firewall de red a nivel de subnet (GRATIS)
+# Network ACLs - Firewall de red a nivel de subnet
 module "nacl" {
   source          = "./modules/nacl"
   vpc_id          = module.vpc.vpc_id
@@ -30,7 +30,7 @@ module "nacl" {
 module "ec2_app" {
   source          = "./modules/ec2"
   vpc_id          = module.vpc.vpc_id
-  private_subnets = module.vpc.private_subnets  # Usar subnets privadas para mayor seguridad
+  private_subnets = module.vpc.public_subnets  # Usar subnets públicas para acceso directo
   alb_sg_id       = module.alb.sg_alb
   project_name    = var.project_name
   target_group_arn = module.alb.target_group_arn
