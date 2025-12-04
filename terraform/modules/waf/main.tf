@@ -127,7 +127,7 @@ resource "aws_wafv2_web_acl" "main" {
 
     statement {
       or_statement {
-        statements {
+        statement {
           byte_match_statement {
             search_string = "process.exit"
             field_to_match {
@@ -142,7 +142,7 @@ resource "aws_wafv2_web_acl" "main" {
             positional_constraint = "CONTAINS"
           }
         }
-        statements {
+        statement {
           byte_match_statement {
             search_string = "require("
             field_to_match {
@@ -157,7 +157,7 @@ resource "aws_wafv2_web_acl" "main" {
             positional_constraint = "CONTAINS"
           }
         }
-        statements {
+        statement {
           byte_match_statement {
             search_string = "child_process"
             field_to_match {
@@ -172,7 +172,7 @@ resource "aws_wafv2_web_acl" "main" {
             positional_constraint = "CONTAINS"
           }
         }
-        statements {
+        statement {
           byte_match_statement {
             search_string = "execsync"
             field_to_match {
