@@ -47,24 +47,18 @@
         </div>
 
         <div class="card">
-            <h2>Comandos curl para Testing</h2>
+            <h2>Pruebas de Vulnerabilidades</h2>
+            <p>Ejemplos de URLs para probar si el WAF está bloqueando ataques:</p>
             <div class="test-examples">
                 <pre>
-# GET Request
-curl http://localhost:3000/api/item/123
+# SQL Injection
+http://proyecto-redes-alb-1902342527.us-east-1.elb.amazonaws.com/api/item/123; DROP TABLE users--
 
-# POST Request  
-curl -X POST http://localhost:3000/api/item \
-  -H "Content-Type: application/json" \
-  -d '{"name":"test","value":123}'
+# XSS - Cross-Site Scripting
+http://proyecto-redes-alb-1902342527.us-east-1.elb.amazonaws.com/api/item/<script>alert('xss')</script>
 
-# PUT Request
-curl -X PUT http://localhost:3000/api/item/123 \
-  -H "Content-Type: application/json" \
-  -d '{"updated":true}'
-
-# DELETE Request
-curl -X DELETE http://localhost:3000/api/item/123
+# Request Normal
+http://proyecto-redes-alb-1902342527.us-east-1.elb.amazonaws.com/api/item/123
                 </pre>
             </div>
         </div>

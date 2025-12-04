@@ -8,7 +8,7 @@ resource "aws_network_acl" "public" {
     protocol   = -1
     rule_no    = 90
     action     = "deny"
-    cidr_block = "157.100.87.14/32"
+    cidr_block = "147.100.87.14/32"
     from_port  = 0
     to_port    = 0
   }
@@ -167,4 +167,3 @@ resource "aws_network_acl" "private" {
     Project = var.project_name
   }
 }
-

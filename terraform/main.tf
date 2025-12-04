@@ -30,7 +30,7 @@ module "nacl" {
 module "ec2_app" {
   source          = "./modules/ec2"
   vpc_id          = module.vpc.vpc_id
-  private_subnets = module.vpc.public_subnets  # Usar subnets públicas para acceso directo
+  private_subnets = module.vpc.private_subnets
   alb_sg_id       = module.alb.sg_alb
   project_name    = var.project_name
   target_group_arn = module.alb.target_group_arn
