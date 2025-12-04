@@ -117,6 +117,86 @@ resource "aws_wafv2_web_acl" "main" {
     }
   }
 
+  rule {
+    name     = "BlockCodeInjection"
+    priority = 6
+
+    action {
+      block {}
+    }
+
+    statement {
+      or_statement {
+        statements {
+          byte_match_statement {
+            search_string = "process.exit"
+            field_to_match {
+              body {
+                oversize_handling = "CONTINUE"
+              }
+            }
+            text_transformation {
+              priority = 0
+              type     = "LOWERCASE"
+            }
+            positional_constraint = "CONTAINS"
+          }
+        }
+        statements {
+          byte_match_statement {
+            search_string = "require("
+            field_to_match {
+              body {
+                oversize_handling = "CONTINUE"
+              }
+            }
+            text_transformation {
+              priority = 0
+              type     = "LOWERCASE"
+            }
+            positional_constraint = "CONTAINS"
+          }
+        }
+        statements {
+          byte_match_statement {
+            search_string = "child_process"
+            field_to_match {
+              body {
+                oversize_handling = "CONTINUE"
+              }
+            }
+            text_transformation {
+              priority = 0
+              type     = "LOWERCASE"
+            }
+            positional_constraint = "CONTAINS"
+          }
+        }
+        statements {
+          byte_match_statement {
+            search_string = "execsync"
+            field_to_match {
+              body {
+                oversize_handling = "CONTINUE"
+              }
+            }
+            text_transformation {
+              priority = 0
+              type     = "LOWERCASE"
+            }
+            positional_constraint = "CONTAINS"
+          }
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "BlockCodeInjection"
+      sampled_requests_enabled   = true
+    }
+  }
+
   visibility_config {
     cloudwatch_metrics_enabled = true
     metric_name                = "${var.project_name}-waf"
