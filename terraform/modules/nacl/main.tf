@@ -53,6 +53,16 @@ resource "aws_network_acl" "public" {
     to_port    = 0
   }
 
+  # Bloquear rango de IPs sospechosas específicas
+  ingress {
+    protocol   = -1
+    rule_no    = 91
+    action     = "deny"
+    cidr_block = "1.0.0.0/8"
+    from_port  = 0
+    to_port    = 0
+  }
+
   # Permitir todo el tráfico saliente
   egress {
     protocol   = -1
