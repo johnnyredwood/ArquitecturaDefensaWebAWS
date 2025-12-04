@@ -46,18 +46,15 @@
         </div>
 
         <div class="card">
-            <h2>Pruebas de Vulnerabilidades</h2>
-            <p>Ejemplos de URLs para probar si el WAF está bloqueando ataques:</p>
+            <h2>Pruebas de Vulnerabilidades en API</h2>
             <div class="test-examples">
                 <pre>
-# SQL Injection
-http://proyecto-redes-alb-1902342527.us-east-1.elb.amazonaws.com/api/item/123; DROP TABLE users--
-
-# XSS - Cross-Site Scripting
-http://proyecto-redes-alb-1902342527.us-east-1.elb.amazonaws.com/api/item/<script>alert('xss')</script>
+# Requests Maliciosas
+[ALB-DNS]/api/item/123' UNION SELECT username,password FROM users--
+[ALB-DNS]/api/item/&lt;img src=x onerror=alert(1)&gt;
 
 # Request Normal
-http://proyecto-redes-alb-1902342527.us-east-1.elb.amazonaws.com/api/item/123
+[ALB-DNS]/api/item/123
                 </pre>
             </div>
         </div>
