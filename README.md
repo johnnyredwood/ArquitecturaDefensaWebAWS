@@ -1,4 +1,4 @@
-Proyecto
+\*Proyecto
 Tema: Diseño e Implementación de una Arquitectura de Defensa Web de Múltiples Capas en AWS utilizando Balanceador de Carga, WAF y Firewall de Red
 ● Descripción detallada de lo que se pretende realizar:
 Este proyecto consiste en el diseño e implementación de una arquitectura de seguridad web en capas utilizando servicios de AWS y contenedores Docker. Para el presente proyecto, construiremos un sistema completo que demuestre cómo proteger aplicaciones web mediante múltiples niveles de defensa en distintas capas, integrando tecnologías modernas de infraestructura como código con Terraform para el despliegue de la infraestructura.
@@ -33,4 +33,4 @@ Finalmente, realizaremos pruebas de funcionalidad y seguridad para validar que t
 Referencias:
 ● Amazon Web Services. (2024). Amazon Virtual Private Cloud (Amazon VPC): Guía del usuario. AWS Documentation. https://docs.aws.amazon.com/vpc/latest/userguide/
 ● Amazon Web Services. (2024). AWS WAF: Guía del desarrollador. AWS Documentation. https://docs.aws.amazon.com/waf/latest/developerguide/
-● HashiCorp. (2023). Terraform: Infrastructure as Code. HashiCorp Documentation. https://developer.hashicorp.com/terraform/docs
+● HashiCorp. (2023). Terraform: Infrastructure as Code. HashiCorp Documentation. https://developer.hashicorp.com/terraform/docs*/
